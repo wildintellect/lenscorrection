@@ -9,6 +9,8 @@ Should be adaptable for any camera in the lensfun db.
 * Python 2.7
 * OpenCV 2.4.x (with Python bindings)
 * Lensfun 2.8+
+* GoPro.xml lensfun definition in the lensfun path, it's too new to be in the packaged versions (I think it's in 3.0+)
+** Put it in ~/.local/share/lensfun/ or in /usr/share/lensfun (on a Linux system)
 
 See pre.sh for more details.
 
