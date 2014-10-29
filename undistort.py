@@ -46,7 +46,7 @@ def process_photos(photos):
 
 def multi_process(photos):
     ''' Multithreaded/Core variant that does multiple photos in parallel'''
-    pool = Pool(processes=4) #2 is safe number of threads/cores, up the number if you have more
+    pool = Pool(processes=2) #2 is safe number of threads/cores, up the number if you have more
     pool.map(correct_photo, photos)
     pool.close()
     pool.join()
