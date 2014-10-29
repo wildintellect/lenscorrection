@@ -87,7 +87,7 @@ def correct_photo(photo):
     undistCoords = mod.apply_geometry_distortion()
     imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_LANCZOS4)
     #imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_NEAREST)
-    cv2.imwrite(undistortedImagePath, imUndistorted)
+    cv2.imwrite(undistortedImagePath, imUndistorted,[int(cv2.IMWRITE_JPEG_QUALITY), 100])
 
 
 if __name__ == '__main__':
