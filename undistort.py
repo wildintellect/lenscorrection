@@ -8,9 +8,11 @@
 
 from PIL import Image
 from PIL.ExifTags import TAGS
-import lensfunpy
+import lensfunpy # Lensfun 
 import cv2 # OpenCV library
 import os
+from multiprocessing import Pool
+import timeit #Add a timer
 
 #Test image /home/madadh/Pictures/gopro/farm/color/3D_R0971.JPG
 def get_exif_data(fname):
@@ -38,9 +40,17 @@ def photolist(directory):
     return(list_of_files)
 
 def process_photos(photos):
-    '''  '''
+    ''' Single threaded iteration of photo list'''
     results = [correct_photo(photo) for photo in photos]
     return(results)
+
+def multi_process(photos):
+    ''' Multithreaded/Core variant that does multiple photos in parallel'''
+    pool = Pool(processes=3)
+    pool.map(correct_photo, photos)
+    pool.close()
+    pool.join()
+    return
 
 def correct_photo(photo):
     '''Apply distortion correction'''
@@ -56,7 +66,7 @@ def correct_photo(photo):
     
     #Set output filename
     fileName, fileExtension = os.path.splitext(photo)
-    undistortedImagePath = "".join([fileName,"_fix_",fileExtension])
+    undistortedImagePath = "".join([fileName,"_fix",fileExtension])
     
     #Query the Lensfun db for camera parameters
     db = lensfunpy.Database()
@@ -76,6 +86,7 @@ def correct_photo(photo):
 
     undistCoords = mod.apply_geometry_distortion()
     imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_LANCZOS4)
+    #imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_NEAREST)
     cv2.imwrite(undistortedImagePath, imUndistorted)
 
 
@@ -83,16 +94,20 @@ if __name__ == '__main__':
 
     #sample = "/home/madadh/Pictures/gopro/farm/color/3D_R0971.JPG"
     #undistortedImagePath ="testoutput.JPG"
-    sample = "/home/madadh/Pictures/gopro/farm/color/test/"
-    directory = sample
+    #sample = "/redwood/Photos/kite/gopro/2013-06-01-cloverleaf/corrected/multi"
+    #directory = sample
 
-    #directory = os.curdir
+    directory = os.curdir
     try:
         os.chdir(directory)
         photos = photolist(directory)
-        result = process_photos(photos)
-    
+        
+        tic=timeit.default_timer()
+        #result = process_photos(photos)
+        multi_process(photos)
+        toc=timeit.default_timer()
         #im = Image.open(sample)
-
+        print(toc-tic)
+        
     except Exception as e:
         print(" ".join(["Something failed because of",str(e)]))
