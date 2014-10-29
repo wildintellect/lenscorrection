@@ -56,7 +56,7 @@ def correct_photo(photo):
     
     #Set output filename
     fileName, fileExtension = os.path.splitext(photo)
-    undistortedImagePath = ("".join[fileName,"_fix_",fileExtension])
+    undistortedImagePath = "".join([fileName,"_fix_",fileExtension])
     
     #Query the Lensfun db for camera parameters
     db = lensfunpy.Database()
