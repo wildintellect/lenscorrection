@@ -66,7 +66,7 @@ def correct_photo(photo):
     
     #Set output filename
     fileName, fileExtension = os.path.splitext(photo)
-    undistortedImagePath = "".join([fileName,"_fix",fileExtension])
+    undistortedImagePath = "".join([fileName,"_fixN",fileExtension])
     
     #Query the Lensfun db for camera parameters
     db = lensfunpy.Database()
@@ -85,8 +85,8 @@ def correct_photo(photo):
     mod.initialize(focalLength, aperture, distance)
 
     undistCoords = mod.apply_geometry_distortion()
-    imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_LANCZOS4)
-    #imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_NEAREST)
+    #imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_LANCZOS4)
+    imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_NEAREST)
     cv2.imwrite(undistortedImagePath, imUndistorted,[int(cv2.IMWRITE_JPEG_QUALITY), 100])
 
 
