@@ -13,6 +13,7 @@ import cv2 # OpenCV library
 import os
 from multiprocessing import Pool
 import timeit #Add a timer
+import pexif
 
 #Test image /home/madadh/Pictures/gopro/farm/color/3D_R0971.JPG
 def get_exif_data(fname):
@@ -89,6 +90,30 @@ def correct_photo(photo):
     #imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_NEAREST)
     cv2.imwrite(undistortedImagePath, imUndistorted,[int(cv2.IMWRITE_JPEG_QUALITY), 100])
 
+    #update the metadata for the new files
+    update_exif("HD2 UnDistort", photo,undistortedImagePath)
+
+def update_exif(camera="HD2 UnDistort" ,inphoto,outphoto):
+    #Write exif data to corrected photos so they are readbable by other applications.
+    #Write Camera name is all OpenDroneMap needs?
+    if importpexif == True:
+    
+        img1 = pexif.JpegFile.fromFile(inphoto)
+        img2 = pexif.JpegFile.fromFile(outphoto)
+        #Copy all the original exif
+        img2.import_exif(img1.exif)
+        #Modify Camera Model and Focal Length
+        img2.exif.primary.Model = "HD2 Undistort"
+        img2.exif.primary.? = "21.5mm (35mm film), 2.5 (lens)"
+        outphoto.writeFile(outphoto)
+    
+def importpexif():
+    try:
+        __import__(pexif)
+    except ImportError:
+        return False
+    else:
+        return True
 
 if __name__ == '__main__':
 
