@@ -15,7 +15,7 @@ from multiprocessing import Pool
 import timeit #Add a timer
 import pexif
 
-#Test image /home/madadh/Pictures/gopro/farm/color/3D_R0971.JPG
+#Test image /Pictures/gopro/farm/color/3D_R0971.JPG
 def get_exif_data(fname):
     """Get embedded EXIF data from image file.
     http://www.endlesslycurious.com/2011/05/11/extracting-image-exif-data-with-python/
@@ -47,7 +47,7 @@ def process_photos(photos):
 
 def multi_process(photos):
     ''' Multithreaded/Core variant that does multiple photos in parallel'''
-    pool = Pool(processes=4) #2 is safe number of threads/cores, up the number if you have more
+    pool = Pool(processes=2) #2 is safe number of threads/cores, up the number if you have more
     pool.map(correct_photo, photos)
     pool.close()
     pool.join()
@@ -67,7 +67,7 @@ def correct_photo(photo):
     
     #Set output filename
     fileName, fileExtension = os.path.splitext(photo)
-    undistortedImagePath = "".join([fileName,"_fix",fileExtension])
+    undistortedImagePath = "".join([fileName,"_fixN",fileExtension])
     
     #Query the Lensfun db for camera parameters
     db = lensfunpy.Database()
@@ -86,8 +86,8 @@ def correct_photo(photo):
     mod.initialize(focalLength, aperture, distance)
 
     undistCoords = mod.apply_geometry_distortion()
-    imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_LANCZOS4)
-    #imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_NEAREST)
+    #imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_LANCZOS4)
+    imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_NEAREST)
     cv2.imwrite(undistortedImagePath, imUndistorted,[int(cv2.IMWRITE_JPEG_QUALITY), 100])
 
     #update the metadata for the new files
@@ -117,7 +117,7 @@ def importpexif():
 
 if __name__ == '__main__':
 
-    #sample = "/home/madadh/Pictures/gopro/farm/color/3D_R0971.JPG"
+    #sample = "/Pictures/gopro/farm/color/3D_R0971.JPG"
     #undistortedImagePath ="testoutput.JPG"
     #sample = "/redwood/Photos/kite/gopro/2013-06-01-cloverleaf/corrected/multi"
     #directory = sample
