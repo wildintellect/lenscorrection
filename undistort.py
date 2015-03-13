@@ -88,14 +88,25 @@ def correct_photo(photo):
     undistCoords = mod.apply_geometry_distortion()
     #imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_LANCZOS4)
     imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_NEAREST)
-    #cv2.imwrite(undistortedImagePath, imUndistorted,[int(cv2.IMWRITE_JPEG_QUALITY), 100])
+    #cv2.imwrite(undistortedImagePath, imUndistorted,[int(cv2.IMWRITE_JPEG_QUALITY), 95])
     pil_im = Image.fromarray(imUndistorted)
 
-    #Can I use pillow to write the final image or pass the exif into imwrite
     #update the metadata for the new files
-    exif_bytes = update_exif(pil_im)
-    pil_im.save(undistortedImagePath, "jpeg", quality=95,exif=exif_bytes)
-
+    exif_dict = piexif.load(photo)
+    #exif_dict = piexif.load(pil_im.info["exif"])
+    
+    exif_dict["0th"][piexif.ImageIFD.Model] = "HD2 U"
+    exif_dict["0th"][piexif.ImageIFD.Make] = "GoPro"
+    exif_dict["Exif"][piexif.ExifIFD.FocalLength] = (250,100)
+    #it's actually 21.5 but exif barfs on float
+    exif_dict["Exif"][piexif.ExifIFD.FocalLengthIn35mmFilm] = 21
+    exif_bytes = piexif.dump(exif_dict)
+    
+    #Write the file with metadata, 100% or 95%
+    pil_im.save(undistortedImagePath, "jpeg", quality=100,exif=exif_bytes)
+    #pil_im.save(undistortedImagePath, "jpeg", quality=95)
+    #piexif.insert(exif_bytes, undistortedImagePath)
+    
 def update_exif(im):
     #Write exif data to corrected photos so they are readbable by other applications.
     #Write Camera name is all OpenDroneMap needs?
