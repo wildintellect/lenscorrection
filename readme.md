@@ -18,8 +18,18 @@ Example![Compare before and after photos](overview.png  "Before and After")
 
 ##Usage
 1. Install the prequisites
-1. Download the undistort.py
+```
+#On Ubuntu
+sudo apt-get install python-opencv lensfun0
+sudo pip install lensfunpy
+sudo pip install piexif
+git clone https://github.com/wildintellect/lenscorrection.git
+mkdir -p ~/.local/share/lensfun/
+sudo cp lenscorrection/gopro.xml ~/.local/share/lensfun/
+```
 1. Open a terminal in the directory where you have photos.
 1. Run the code
-	python /path/to/undistort.py
+```
+python /path/to/undistort.py
+```
 1. Results will be filename_fix.jpg
