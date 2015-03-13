@@ -106,35 +106,7 @@ def correct_photo(photo):
     pil_im.save(undistortedImagePath, "jpeg", quality=100,exif=exif_bytes)
     #pil_im.save(undistortedImagePath, "jpeg", quality=95)
     #piexif.insert(exif_bytes, undistortedImagePath)
-    
-def update_exif(im):
-    #Write exif data to corrected photos so they are readbable by other applications.
-    #Write Camera name is all OpenDroneMap needs?
-    #if imexif == True:
-        
-    #im = Image.open(imPath)
-    exif_dict = piexif.load(im.info["exif"])
-    exif_dict["0th"][piexif.ImageIFD.Model] = "HD2 U"
-    exif_dict["0th"][piexif.ImageIFD.Make] = "GoPro"
-    exif_dict["Exif"][piexif.ExifIFD.FocalLength] = (250,100)
-    exif_dict["Exif"][piexif.ExifIFD.FocalLengthIn35mmFilm] = 21.5
-    exif_bytes = piexif.dump(exif_dict)
-
-    #im.save(imPath, "jpeg", exif=exif_bytes)
-    
-    #img1 = pexif.JpegFile.fromFile(inphoto)
-    #img2 = pexif.JpegFile.fromFile(outphoto)
-    #Copy all the original exif
-    #img2.import_exif(img1.exif)
-    #Modify Camera Model and Focal Length
-    #img2.exif.primary.Model = "HD2 Undistort"
-    #img1.exif.primary.ExtendedEXIF.FocalLength = [250 / 100]
-    #img2.exif.primary.ExtendedEXIF.FocalLength = "21.5mm (35mm film), 2.5 (lens)"
-    #img2.exif.primary.ExtendedEXIF.FocalLength = "250 / 100"
-    #img2.exif.primary.ExtendedEXIF.FocalLengthIn35mmFilm = "21.5"
-    #img2.writeFile(outphoto)
-    return(exif_bytes)
-    
+      
 def importexif():
     try:
         __import__(piexif)
@@ -151,9 +123,9 @@ if __name__ == '__main__':
     #sample = "/Pictures/gopro/farm/color/3D_R0971.JPG"
     #undistortedImagePath ="testoutput.JPG"
     #sample = "/redwood/Photos/kite/gopro/2013-06-01-cloverleaf/corrected/multi"
-    directory = "/home/madadh/Pictures/odm/checkercalibration/measure"
+    #directory = "/home/madadh/Pictures/odm/checkercalibration/measure"
 
-    #directory = os.curdir
+    directory = os.curdir
     try:
         os.chdir(directory)
         photos = photolist(directory)
