@@ -89,7 +89,10 @@ def correct_photo(photo):
     #imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_LANCZOS4)
     imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_NEAREST)
     #cv2.imwrite(undistortedImagePath, imUndistorted,[int(cv2.IMWRITE_JPEG_QUALITY), 95])
-    pil_im = Image.fromarray(imUndistorted)
+    
+    #Change the order of colors to RGB for Pil (Pillow)
+    cvRgbImage = cv2.cvtColor(imUndistorted, cv2.COLOR_BGR2RGB)
+    pil_im = Image.fromarray(cvRgbImage)
 
     #update the metadata for the new files
     exif_dict = piexif.load(photo)
