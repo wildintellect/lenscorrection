@@ -1,11 +1,12 @@
-#Lens Correction 
-#####(aka Zap-distortion)
+# Lens Correction 
+##### (aka Zap-distortion)
 
 A Python script to batch correct photo distortion for a GoPro Hero2 using the Lenfun database. 
 
 Should be adaptable for any camera in the lensfun db.
 
-##Requirements
+## Requirements
+
 * Python 2.7 (should work with Python 3 if you have OpenCV with Python 3 bindings)
 * OpenCV 2.4.x (with Python bindings)
 * Lensfun 2.8+ , lensfunpy
@@ -17,7 +18,8 @@ See pre.sh for more details.
 
 Example![Compare before and after photos](overview.png  "Before and After")
 
-##Usage
+## Usage
+
 1. Install the prequisites
 ```
 #On Ubuntu
@@ -35,7 +37,7 @@ python /path/to/undistort.py
 ```
 Results will be filename_fix.jpg
 
-##Notes
+## Notes
 
 * Currently only does GoPro Hero2
 * Exif is copied from original image except for a few values.
